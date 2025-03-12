@@ -1,35 +1,94 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InputManager : MonoBehaviour
+public class InputManager
 {
-    [SerializeField] Vector2 _moveDirection;
-    [SerializeField] bool _isDashPressed;
-    [SerializeField] bool _isInteractPressed;
-    public Vector2 MoveDirection => _moveDirection;
+    static InputManager _instance;
+    public static InputManager Instance => _instance;
+
+    Vector3 _moveDirection;
+    bool _isDashPressed;
+    bool _isInteractPressed;
+    bool _isMove;
+
+    public bool IsMove => _isMove;
+    public Vector3 MoveDirection => _moveDirection;
     public bool IsDashPressed { get; private set; }
-    public bool IsInteractPressed { get; private set; } 
+    public bool IsInteractPressed { get; private set; }
 
-    void OnMove(InputValue inputValue)
+    PlayerInputSystem _playerInputSystem;
+    InputAction _move;
+    InputAction _dash;
+    InputAction _interact;
+
+    public void Init()
     {
-        _moveDirection = inputValue.Get<Vector2>();
+        _playerInputSystem = new PlayerInputSystem();
+        _move = _playerInputSystem.Player.Move;
+        _dash = _playerInputSystem.Player.Dash;
+        _interact = _playerInputSystem.Player.Interact;
 
-        if (_moveDirection != Vector2.zero)
-            Debug.Log("¿òÁ÷ÀÓ Á¸Àç");
+        _move.Enable();
+        _dash.Enable();
+        _interact.Enable();
+
+        // ì´ë²¤íŠ¸ ë“±ë¡
+        _move.performed += OnMove;
+        _move.canceled += OnMove;
+
+        _dash.performed += OnDash;
+        _interact.performed += OnInteract;
     }
 
-    void OnDash(InputValue inputValue)
+    void OnMove(InputAction.CallbackContext context)
     {
-        _isDashPressed = inputValue.isPressed;
+        if(context.phase == InputActionPhase.Performed)
+        {
+            Vector2 moveInput = context.ReadValue<Vector2>();
+            _moveDirection = new Vector3(moveInput.x, 0, moveInput.y);
+            _isMove = true;
 
-        if (_isDashPressed)
-            Debug.Log("´ë½¬ ÀÔ·Â");
+            Debug.Log("ì´ë™ í‚¤ ëˆ„ë¦„");
+        }
+        else if (context.phase == InputActionPhase.Canceled)
+        {
+            _moveDirection = Vector3.zero;
+            _isMove = false;
+
+            Debug.Log("ì´ë™ í‚¤ ë—Œ");
+        }
     }
 
-    void OnInteract(InputValue inputValue)
+    void OnDash(InputAction.CallbackContext context)
     {
-        _isInteractPressed = inputValue.isPressed;
-        if (_isInteractPressed)
-            Debug.Log("»óÈ£ÀÛ¿ë ÀÔ·Â");
+        _isDashPressed = context.ReadValueAsButton();
+
+        if (context.ReadValueAsButton())
+        {
+            Debug.Log("ëŒ€ì‹œ ëˆ„ë¦„");
+
+            // TODO
+            
+            _isDashPressed = false;
+        }
+    }
+
+    void OnInteract(InputAction.CallbackContext context)
+    {
+        _isInteractPressed = context.ReadValueAsButton();
+        if (context.ReadValueAsButton())
+        {
+            Debug.Log("ìƒí˜¸ì‘ìš© ëˆ„ë¦„");
+            _isInteractPressed = false;
+            
+            // TODO
+        }
+    }
+
+    public void Clear()
+    {
+        _move.Disable();
+        _dash.Disable();
+        _interact.Disable();
     }
 }

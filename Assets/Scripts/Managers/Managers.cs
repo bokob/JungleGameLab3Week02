@@ -3,13 +3,12 @@ using UnityEngine;
 public class Managers : MonoBehaviour
 {
     static Managers _instance;
-    static Managers Instance { get { Init(); return _instance; } }
+    public static Managers Instance { get { Init(); return _instance; } }
 
-    //InputManager _inputManager = new InputManager();
-    //public static InputManager Input { get { return Instance._inputManager; } }
-
+    InputManager _input = new InputManager();
     GameManager _game = new GameManager();
     public static GameManager Game { get { return Instance._game; } }
+    public static InputManager Input { get { return Instance._input; } }
     void Awake()
     {
         Init();
@@ -18,11 +17,12 @@ public class Managers : MonoBehaviour
 
     void Start()
     {
-        
     }
 
     void Update()
     {
+        // _input.Update();
+        //_input.test();
     }
 
     static void Init()
@@ -30,13 +30,15 @@ public class Managers : MonoBehaviour
         if (_instance == null)
         {
             GameObject go = GameObject.Find("Managers");
-            if (go == null) // ¾ø´Â °æ¿ì
+            if (go == null) // ì—†ëŠ” ê²½ìš°
             {
                 go = new GameObject { name = "Managers" };
                 go.AddComponent<Managers>();
             }
             DontDestroyOnLoad(go);
             _instance = go.GetComponent<Managers>();
+            
+            Input.Init();
         }
     }
 }
