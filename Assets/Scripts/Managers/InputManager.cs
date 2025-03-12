@@ -48,14 +48,14 @@ public class InputManager
             _moveDirection = new Vector3(moveInput.x, 0, moveInput.y);
             _isMove = true;
 
-            Debug.Log("이동 키 누름");
+            //Debug.Log("이동 키 누름");
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
             _moveDirection = Vector3.zero;
             _isMove = false;
 
-            Debug.Log("이동 키 뗌");
+            //Debug.Log("이동 키 뗌");
         }
     }
 

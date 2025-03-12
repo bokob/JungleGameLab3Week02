@@ -37,7 +37,7 @@ public class Managers : MonoBehaviour
             }
             DontDestroyOnLoad(go);
             _instance = go.GetComponent<Managers>();
-            
+            Game.SpawnPlayer((GameObject)Resources.Load(""));
             Input.Init();
         }
     }

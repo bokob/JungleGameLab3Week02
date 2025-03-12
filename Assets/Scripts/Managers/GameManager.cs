@@ -1,9 +1,14 @@
-﻿using UnityEngine;
+using System;
+using UnityEngine;
+
 
 public class GameManager
 {
-    public void Init()
-    {
 
+    public Action<GameObject> OnPlayerSpawn;
+   
+    public void SpawnPlayer(GameObject _playerPrefabs)
+    {
+        OnPlayerSpawn?.Invoke(_playerPrefabs);
     }
 }

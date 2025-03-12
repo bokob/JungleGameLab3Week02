@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IDashable
 {
     static PlayerController _instance;
     public static PlayerController Instance => _instance;
@@ -10,8 +10,7 @@ public class PlayerController : MonoBehaviour
     Rigidbody _rb;
 
     [Header("움직임")]
-    [SerializeField] float _moveSpeed = 3f;
-    [SerializeField] float _rotateSpeed = 5f;
+    float _moveSpeed = 5f;
     [SerializeField] float _dashForce = 100f;
 
     public Action<Vector3> OnMoveAction;
@@ -27,15 +26,19 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        Move();
+        Movement();
     }
 
-    public void Move()
+    // 움직임
+    public void Movement()
     {
         if (Managers.Input.IsMove)
         {
             Vector3 moveDirection = Managers.Input.MoveDirection;
             Vector3 moveVelocity = moveDirection * _moveSpeed;
+
+            transform.LookAt(transform.position + moveVelocity);
+
             _rb.linearVelocity = new Vector3(moveVelocity.x, _rb.linearVelocity.y, moveVelocity.z);
         }
         else
@@ -44,15 +47,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void Rotate()
+    public void Dash()
     {
-
-    }
-
-    public void Dash(Vector3 moveDirection)
-    {
-        Vector3 dashDirection = moveDirection * _dashForce;
-        _rb.AddForce(dashDirection, ForceMode.Impulse);
+        //Vector3 dashDirection = moveDirection * _dashForce;
+        //_rb.AddForce(dashDirection, ForceMode.Impulse);
     }
 
     public void Interact()
