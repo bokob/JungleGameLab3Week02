@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -21,6 +22,10 @@ public class InputManager
     InputAction _dash;
     InputAction _interact;
 
+    [Header("액션")]
+    public Action OnDashEvent;
+    public Action OnInteractEvent;
+
     public void Init()
     {
         _playerInputSystem = new PlayerInputSystem();
@@ -32,7 +37,7 @@ public class InputManager
         _dash.Enable();
         _interact.Enable();
 
-        // 이벤트 등록
+        // 키 입력 이벤트 등록
         _move.performed += OnMove;
         _move.canceled += OnMove;
 
@@ -40,6 +45,7 @@ public class InputManager
         _interact.performed += OnInteract;
     }
 
+    #region Input Action
     void OnMove(InputAction.CallbackContext context)
     {
         if(context.phase == InputActionPhase.Performed)
@@ -62,13 +68,9 @@ public class InputManager
     void OnDash(InputAction.CallbackContext context)
     {
         _isDashPressed = context.ReadValueAsButton();
-
-        if (context.ReadValueAsButton())
+        if (_isDashPressed)
         {
-            Debug.Log("대시 누름");
-
-            // TODO
-            
+            OnDashEvent?.Invoke(); // 대시
             _isDashPressed = false;
         }
     }
@@ -76,14 +78,14 @@ public class InputManager
     void OnInteract(InputAction.CallbackContext context)
     {
         _isInteractPressed = context.ReadValueAsButton();
-        if (context.ReadValueAsButton())
+        if (_isInteractPressed)
         {
             Debug.Log("상호작용 누름");
+            OnInteractEvent?.Invoke(); // 상호작용
             _isInteractPressed = false;
-            
-            // TODO
         }
     }
+    #endregion
 
     public void Clear()
     {

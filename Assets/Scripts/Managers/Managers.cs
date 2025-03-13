@@ -18,17 +18,6 @@ public class Managers : MonoBehaviour
         Init();
     }
 
-
-    void Start()
-    {
-    }
-
-    void Update()
-    {
-        // _input.Update();
-        //_input.test();
-    }
-
     static void Init()
     {
         if (_instance == null)

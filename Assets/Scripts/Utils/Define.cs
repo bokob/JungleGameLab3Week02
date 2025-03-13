@@ -11,13 +11,22 @@ public class Define
         StoreScene
     }
 
-    // 환경(자원)
+    // 환경
     public enum Environment
     {
         None,
-        Tree,
-        Rock,
-        River
+        Tree,   // 나무
+        Rock,   // 돌
+        River   //  강
+    }
+
+    // 자원
+    public enum Resource
+    {
+        None,
+        Wood,   // 목재
+        Iron,   // 철
+        Water   // 물
     }
 
     // 도구
@@ -35,6 +44,14 @@ public class Define
         None,
         Engine,
         WaterTank,
+    }
 
+    // 플레이어 손에 들 수 있는 것
+    public enum HandHold
+    {
+        None,
+        Tool,           // 도구
+        Resource,       // 자원
+        Compartment     // 열차 부품
     }
 }

@@ -1,36 +1,30 @@
-using System;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour, IDashable
+public class PlayerController : MonoBehaviour
 {
-    static PlayerController _instance;
-    public static PlayerController Instance => _instance;
-
     [Header("컴포넌트")]
     Rigidbody _rb;
 
     [Header("움직임")]
     float _moveSpeed = 5f;
-    [SerializeField] float _dashForce = 100f;
 
-    public Action<Vector3> OnMoveAction;
-    void Awake()
+    void Start()
     {
-        if(_instance == null)
-            _instance = this;
-        else
-            Destroy(gameObject);
+        Init();
+    }
 
+    void Init()
+    {
         _rb = GetComponent<Rigidbody>();
     }
 
     void FixedUpdate()
     {
-        Movement();
+        Move();
     }
 
-    // 움직임
-    public void Movement()
+    // 움직임(이동 및 회전)
+    public void Move()
     {
         if (Managers.Input.IsMove)
         {
@@ -45,16 +39,5 @@ public class PlayerController : MonoBehaviour, IDashable
         {
             _rb.linearVelocity = new Vector3(0, _rb.linearVelocity.y, 0);
         }
-    }
-
-    public void Dash()
-    {
-        //Vector3 dashDirection = moveDirection * _dashForce;
-        //_rb.AddForce(dashDirection, ForceMode.Impulse);
-    }
-
-    public void Interact()
-    {
-
     }
 }
