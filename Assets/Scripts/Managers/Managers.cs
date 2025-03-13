@@ -5,10 +5,14 @@ public class Managers : MonoBehaviour
     static Managers _instance;
     public static Managers Instance { get { Init(); return _instance; } }
 
-    InputManager _input = new InputManager();
     GameManager _game = new GameManager();
+    InputManager _input = new InputManager();
+    ResourceManager _resource = new ResourceManager();
+
     public static GameManager Game { get { return Instance._game; } }
     public static InputManager Input { get { return Instance._input; } }
+    public static ResourceManager Resource { get { return Instance._resource; } }
+
     void Awake()
     {
         Init();
