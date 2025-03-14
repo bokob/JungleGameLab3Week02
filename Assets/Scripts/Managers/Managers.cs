@@ -34,4 +34,9 @@ public class Managers : MonoBehaviour
             Input.Init();
         }
     }
+
+    void OnDisable()
+    {
+        Input.Clear();
+    }
 }

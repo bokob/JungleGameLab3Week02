@@ -42,7 +42,9 @@ public class InputManager
         _move.canceled += OnMove;
 
         _dash.performed += OnDash;
-        _interact.performed += OnInteract;
+
+        _interact.started += OnInteract;
+        _interact.canceled += OnInteract;
     }
 
     #region Input Action
@@ -71,8 +73,9 @@ public class InputManager
         if (_isDashPressed)
         {
             OnDashEvent?.Invoke(); // 대시
-            _isDashPressed = false;
+            
         }
+        _isDashPressed = false;
     }
 
     void OnInteract(InputAction.CallbackContext context)
@@ -82,7 +85,6 @@ public class InputManager
         {
             Debug.Log("상호작용 누름");
             OnInteractEvent?.Invoke(); // 상호작용
-            _isInteractPressed = false;
         }
     }
     #endregion
@@ -92,5 +94,7 @@ public class InputManager
         _move.Disable();
         _dash.Disable();
         _interact.Disable();
+        _playerInputSystem.Player.Disable();
+        _playerInputSystem.UI.Disable();
     }
 }

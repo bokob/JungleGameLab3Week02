@@ -8,16 +8,7 @@ public abstract class Tool : MonoBehaviour, IHandHold
 
     public Define.Tool ToolType { get; protected set; }
 
-    protected static PlayerController _playerController;
-
-    protected bool isUsing = false; // 도구 사용중인지 여부
-
     protected virtual void Init(){}
 
     public abstract void Use();
-
-    public float GetDistancePlayer()  // 플레이어와의 거리 계산
-    {
-        return Vector3.Distance(transform.position, _playerController.transform.position);
-    }
 }

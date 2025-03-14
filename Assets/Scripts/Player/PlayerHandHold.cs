@@ -5,26 +5,17 @@ using UnityEngine;
 // 플레이어 손에 넣을 것들 관리
 public class PlayerHandHold : MonoBehaviour
 {
-    [Header("현재 들고 있는 것")]
-    public Define.HandHold CurrentHandHoldType { get; protected set; }  // 현재 손에 들고 있는 것의 종류
-    IHandHold _currentHandHold;                 // 현재 손에 들고 있는 것
-    
-    [Header("상호작용")]
-    bool _isPickup = false;                     // 손에 들고 있는지 여부
-    bool IsPickup { get { return _isPickup; } }
-    LayerMask _interactionLayerMask;            // 상호작용 가능한 레이어 마스크(도구, 환경, 자원)
-    LayerMask _toolLayerMask = 1 << 6;
-    LayerMask _environmentLayerMask = 1 << 7;
-    LayerMask _resourceLayerMask = 1 << 8;
-    float _range = 0.6f;         // 탐색 범위
-    
-    [Header("채집")]
-    Tool _currentTool;                        // 현재 손에 들고 있는 도구
-    bool isNearHandHold = false;              // 주변에 손에 들 수 있는 것이 있는지 여부
-    bool isNearEnvironment = false;           // 주변에 채집 가능한 환경이 있는지 여부
+    PlayerCheckInteraction _playerCheckInteraction;
 
-    [Header("디버깅용")]
-    bool isFind = false;
+    [Header("손")]
+    Transform _handToolTransform;                   // 도구 손 위치
+    Transform _handResourceTransform;               // 자원 손 위치
+
+    [Header("상호작용")]
+    [SerializeField] Transform _nearHandHoldTransform;
+    IHandHold _nearHandHold;
+    IHandHold _currentHandHold;
+    UnityEngine.Object _currentHandHoldObject;          // 현재 손에 들고 있는 것
 
     void Awake()
     {
@@ -33,105 +24,67 @@ public class PlayerHandHold : MonoBehaviour
 
     public void  init()
     {
-        _isPickup = false;
-        _interactionLayerMask = _toolLayerMask | _environmentLayerMask | _resourceLayerMask;
+        _playerCheckInteraction = GetComponent<PlayerCheckInteraction>();
+
+        _handToolTransform = transform.Find("HandTool");
+        _handResourceTransform = transform.Find("HandResource");
+
+        Managers.Input.OnInteractEvent += InteractHandHold;
     }
 
-    void Update()
+    // 들 수 있는 물건과 상호작용
+    public void InteractHandHold()
     {
-        CheckFrontOfFeet();
-        if (isNearHandHold && !_isPickup && Managers.Input.IsInteractPressed) // 도구, 자원 줍기
-        {
-            Debug.Log("도구 or 자원 줍기");
-        }
-        else if(isNearEnvironment && _currentTool != null) // 채집
-        {
-            Debug.Log("자동 채집");
-        }
-        else if(_isPickup && Managers.Input.IsInteractPressed) // 손에 들고 있는 것 놓기
-        {
-            Debug.Log("손에 든거 놓기");
-        }
+        _nearHandHoldTransform = _playerCheckInteraction.NearHandHoldTransform;
+
+        if (_nearHandHoldTransform != null) // 주변에 손에 들 수 있는 것이 있는 경우
+            GetHandHold();
+        else if(_nearHandHoldTransform == null && _currentHandHoldObject != null) // 주변 X, 손에 들고 있는 경우
+            PutHandHold(); // 땅에 두기
     }
 
-    // 발 앞에 있는 것 체크
-    void CheckFrontOfFeet()
+    // 손에 들 수 있는 것 줍기
+    public void GetHandHold()
     {
-        Debug.DrawRay(transform.position - transform.up * 0.95f, transform.forward * _range, Color.blue);
-        Collider[] colliders = Physics.OverlapSphere(transform.position - transform.up * 0.95f, _range, _interactionLayerMask);
-
-        if (colliders.Length > 0)
+        if (_currentHandHoldObject != null) // 이미 손에 무언가 들고 있는 경우
         {
-            isFind = true;
-
-            for(int i=0; i < colliders.Length; i++)
-            {
-                LayerMask layerMask = colliders[i].gameObject.layer;
-                if (layerMask == _toolLayerMask || layerMask == _resourceLayerMask)
-                {
-                    isNearHandHold = true;
-                }
-                else if (layerMask == _environmentLayerMask)
-                {
-                    isNearEnvironment = true;
-                }
-            }
+            // 들고 있던 물건 내려놓기
+            Transform currentHandHoldTransform = (Transform)_currentHandHoldObject;
+            currentHandHoldTransform.SetParent(null);
+            currentHandHoldTransform.position = _nearHandHoldTransform.position;
+            currentHandHoldTransform.rotation = _nearHandHoldTransform.rotation;   
         }
-        else
-        {
-            isFind = false;
 
-            isNearHandHold = false;
-            isNearEnvironment = false;
+        // 근처 손에 들 수 있는 것의 인터페이스 가져오기
+        _nearHandHold = _nearHandHoldTransform.GetComponent<IHandHold>();
+        if (_nearHandHold.HandHoldType == Define.HandHold.Tool)           // 도구인 경우
+        {
+            // 새로운 물건 손에 들기
+            _nearHandHoldTransform.SetParent(_handToolTransform);
+            _nearHandHoldTransform.localPosition = Vector3.zero;
+            _nearHandHoldTransform.localRotation = Quaternion.identity;
+
+            // 새로운 물건을 현재 손에 들고 있는 것으로 변경
+            _currentHandHoldObject = _nearHandHoldTransform;
+            _currentHandHold = GetComponent<IHandHold>();
+            _nearHandHoldTransform = null;
         }
-    }
-
-    public void GetObject(IHandHold handHold)
-    {
-        if (_currentHandHold == null && _isPickup == false)
+        else if (_nearHandHold.HandHoldType == Define.HandHold.Resource)  // 자원인 경우
         {
-            switch (handHold.HandHoldType)
-            {
-                case Define.HandHold.Tool:
-                    {
-                        if (_currentTool == null)
-                        {
-                            _currentHandHold = handHold;
-                            _currentTool = (Tool)handHold;
-                            _currentTool.Use();
-                        }
-                    }
-                    break;
-                case Define.HandHold.Resource:
-                    {
 
-                    }
-                    break;
-                default:
-                    Debug.Log("들 수 없는것");
-                    break;
-            }
         }
     }
 
-    void PutObject()
+    public void PutHandHold()
     {
+        Debug.Log("버려버려");
+        Transform currentHandHoldTransform = (Transform)_currentHandHoldObject;
+        currentHandHoldTransform.SetParent(null);
+        currentHandHoldTransform.position = _playerCheckInteraction.GridCenterPos;
+        currentHandHoldTransform.rotation = Quaternion.identity;
 
-    }
 
-    public void UseTool()
-    {
-        if (IsPickup && CurrentHandHoldType == Define.HandHold.Tool && isNearEnvironment)
-        {
-            Debug.Log("Use Tool");
-            _currentTool.Use();
-        }
-    }
 
-    void OnDrawGizmos()
-    {
-        // 플레이어 발 앞
-        Gizmos.color = (isFind) ? new Color(0,1,0) : new Color(1, 0, 0);
-        Gizmos.DrawSphere(transform.position - transform.up * 0.95f, _range);
+        _currentHandHoldObject = null;  // 비우기ㅇㅁㅇ
     }
 }
