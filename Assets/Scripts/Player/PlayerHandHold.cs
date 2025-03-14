@@ -5,7 +5,8 @@ using UnityEngine;
 // 플레이어 손에 넣을 것들 관리
 public class PlayerHandHold : MonoBehaviour
 {
-    PlayerCheckInteraction _playerCheckInteraction;
+    PlayerGrid _playerCheckInteraction;
+    PlayerCheckHandHold _playerCheckHandHold;
 
     [Header("손")]
     Transform _handToolTransform;                   // 도구 손 위치
@@ -24,7 +25,8 @@ public class PlayerHandHold : MonoBehaviour
 
     public void  init()
     {
-        _playerCheckInteraction = GetComponent<PlayerCheckInteraction>();
+        _playerCheckInteraction = GetComponent<PlayerGrid>();
+        _playerCheckHandHold = GetComponent<PlayerCheckHandHold>();
 
         _handToolTransform = transform.Find("HandTool");
         _handResourceTransform = transform.Find("HandResource");
@@ -35,7 +37,7 @@ public class PlayerHandHold : MonoBehaviour
     // 들 수 있는 물건과 상호작용
     public void InteractHandHold()
     {
-        _nearHandHoldTransform = _playerCheckInteraction.NearHandHoldTransform;
+        _nearHandHoldTransform = _playerCheckHandHold.NearHandHoldTransform;
 
         if (_nearHandHoldTransform != null) // 주변에 손에 들 수 있는 것이 있는 경우
             GetHandHold();
@@ -83,8 +85,6 @@ public class PlayerHandHold : MonoBehaviour
         currentHandHoldTransform.position = _playerCheckInteraction.GridCenterPos;
         currentHandHoldTransform.rotation = Quaternion.identity;
 
-
-
-        _currentHandHoldObject = null;  // 비우기ㅇㅁㅇ
+        _currentHandHoldObject = null;  // 비우기
     }
 }
