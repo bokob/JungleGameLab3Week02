@@ -4,12 +4,25 @@ using static UnityEditor.Experimental.GraphView.Port;
 
 public class PlayerStack : MonoBehaviour
 {
-    int capacity = 3;
+    [Header("감지")]
+    PlayerGrid _playerGrid;
 
-    [SerializeField] Transform _handResourceTransform;
+    [Header("손")]
+    Transform _handResourceTransform;                   // 도구 손 위치
+
+    [Header("현재 스택요소")]
+    Tool _currentTool; // 현재 손에 들고 있는 도구
+    public Tool CurrentTool { get { return _currentTool; } }
+    public bool IsHoldTool { get { return _currentTool != null; } }
+
+    #region 스택
+    int capacity = 3;
     [SerializeField] Transform _topPointer;
     [SerializeField] List<Transform> _stack = new List<Transform>();
     float _offset = 0.5f;
+    public bool IsEmpty { get { return _stack.Count == 0; } }
+    public bool IsFull { get { return _stack.Count == capacity; } }
+    #endregion
 
     [SerializeField] GameObject testPrefab;
 
@@ -34,6 +47,8 @@ public class PlayerStack : MonoBehaviour
 
     void Init()
     {
+        _playerGrid = GetComponent<PlayerGrid>();
+
         _handResourceTransform = transform.Find("HandResource");
         _topPointer = _handResourceTransform.Find("TopPointer");
     }
@@ -74,4 +89,11 @@ public class PlayerStack : MonoBehaviour
         return GO;
     }
     #endregion
+
+
+    public void Put()
+    {
+
+    }
+
 }

@@ -5,24 +5,28 @@ using UnityEngine;
 /// </summary>
 public class PlayerGather : MonoBehaviour
 {
-    PlayerHandHold _playerHandHold;
-    PlayerCheckEnvironment _playerCheckEnvironment;
-
-    [Header("상호작용")]
-    [SerializeField] Transform _nearGatherTransform;
-    bool isHaveTool = false;
-
-    Environment _nearEnvironment;
-    Tool _currentTool;
-
     [Header("애니메이션")]
     Animator _anim;
     int _gatherHash;
 
+    PlayerTool _playerTool;
+    PlayerCheckEnvironment _playerCheckEnvironment;
+
+    [Header("상호작용")]
+    bool isHaveTool = false;
+    Tool _currentTool;
+    Environment _nearEnvironment;
+    [SerializeField] Transform _nearGatherTransform;
+
     void Awake()
     {
-        _playerHandHold = GetComponent<PlayerHandHold>();
+        Init();
+    }
+
+    void Init()
+    {
         _playerCheckEnvironment = GetComponent<PlayerCheckEnvironment>();
+        _playerTool = GetComponent<PlayerTool>();
 
         _anim = GetComponent<Animator>();
         _gatherHash = Animator.StringToHash("isGather");
@@ -30,7 +34,7 @@ public class PlayerGather : MonoBehaviour
 
     void Update()
     {
-        if (_playerCheckEnvironment.NearEnvironmentTransform != null && _playerHandHold.CurrentTool != null) // 도구, 환경 O
+        if (_playerCheckEnvironment.NearEnvironmentTransform != null && _playerTool.IsHoldTool) // 도구, 환경 O
         {
             Debug.Log("실행");
             InteractEnvironment();
@@ -41,12 +45,12 @@ public class PlayerGather : MonoBehaviour
 
     void InteractEnvironment()
     {
-        isHaveTool = Define.HandHold.Tool == _playerHandHold.CurrentHandHold.HandHoldType;
+        isHaveTool = _playerTool.IsHoldTool;
         _nearGatherTransform = _playerCheckEnvironment.NearEnvironmentTransform;
         if (isHaveTool)
         {
             _nearEnvironment = _nearGatherTransform.GetComponent<Environment>();
-            _currentTool = _playerHandHold.CurrentTool;
+            _currentTool = _playerTool.CurrentTool;
             if ((_currentTool.ToolType == Define.Tool.Axe && _nearEnvironment.EnvironmentType == Define.Environment.Tree) ||
                 (_currentTool.ToolType == Define.Tool.Pickaxe && _nearEnvironment.EnvironmentType == Define.Environment.Rock))
             {
@@ -67,12 +71,8 @@ public class PlayerGather : MonoBehaviour
             Environment environment = null;
             if (_nearGatherTransform.TryGetComponent<Environment>(out environment))
             {
-                environment.Deplete(_playerHandHold.CurrentTool.ToolType);
+                environment.Deplete(_playerTool.CurrentTool.ToolType);
             }
-        }
-        else
-        {
-            Debug.Log("주변 채집 환경 X");
         }
     }
 }
