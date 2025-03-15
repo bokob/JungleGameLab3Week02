@@ -96,6 +96,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1488757456893119875}
   - component: {fileID: 1634198238882041492}
+  - component: {fileID: 9073670386205703494}
   m_Layer: 7
   m_Name: Stone
   m_TagString: Untagged
@@ -139,4 +140,17 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &9073670386205703494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5090495512046571032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f50f6a2478a8074893c42c9017077d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _resource: {fileID: 2506259381436741189, guid: f229be560f78be541ae1f40111c812f8, type: 3}

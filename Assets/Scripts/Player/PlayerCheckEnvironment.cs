@@ -5,6 +5,9 @@ public class PlayerCheckEnvironment : MonoBehaviour
     [Header("상호작용")]
     PlayerGrid _playerCheckInteraction;
 
+    Transform _nearEnvironmentTransform;
+    [field: SerializeField] public Transform NearEnvironmentTransform { get { return _nearEnvironmentTransform; } }
+
     LayerMask _environmentLayerMask = 1 << 7;
 
     bool _isNearEnvironment = false;     // 주변에 채집 가능한 환경이 있는지 여부
@@ -30,7 +33,7 @@ public class PlayerCheckEnvironment : MonoBehaviour
     // 해당 그리드에 손으로 들 수 있는 것 찾기
     public void CheckClosestHandHold()
     {
-        Collider[] colliders = Physics.OverlapSphere(_playerCheckInteraction.GridCenterPos + transform.up, _checkRange, _environmentLayerMask);
+        Collider[] colliders = Physics.OverlapSphere(_playerCheckInteraction.GridCenterPos + transform.up * 0.5f, _checkRange, _environmentLayerMask);
 
         if (colliders.Length >= 1)  // 가장 가까운 것 찾기
         {
@@ -47,10 +50,12 @@ public class PlayerCheckEnvironment : MonoBehaviour
                     target = collider;
                 }
             }
+            _nearEnvironmentTransform = target.transform; // 근처에 있는 채집 가능한 환경 할당
         }
         else
         {
             _isNearEnvironment = false;
+            _nearEnvironmentTransform = null;
         }
     }
 
@@ -60,7 +65,7 @@ public class PlayerCheckEnvironment : MonoBehaviour
         {
             // 플레이어 앞
             Gizmos.color = (_isNearEnvironment) ? new Color(1, 1, 0) : new Color(0, 0, 1);
-            Gizmos.DrawSphere(_playerCheckInteraction.GridCenterPos + transform.up, _checkRange);
+            Gizmos.DrawSphere(_playerCheckInteraction.GridCenterPos + transform.up * 0.5f, _checkRange);
         }
     }
 }

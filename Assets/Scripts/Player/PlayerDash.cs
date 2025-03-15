@@ -19,11 +19,5 @@ public class PlayerDash : MonoBehaviour
     public void Dash()
     {
         _rb.AddForce(transform.forward * _dashForce, ForceMode.Acceleration);
-        Debug.Log("~대시~");
-    }
-
-    void OnDestroy()
-    {
-        Managers.Input.OnDashEvent -= Dash;
     }
 }

@@ -1,32 +1,15 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Define
 {
-    // 씬
-    public enum Scene
+    // 물건을 드는 데 사용하는 손 개수
+    public enum HandHold
     {
         None,
-        TitleScene,
-        InGameScene,
-        StoreScene
-    }
-
-    // 환경
-    public enum Environment
-    {
-        None,
-        Tree,   // 나무
-        Rock,   // 돌
-        River   //  강
-    }
-
-    // 자원
-    public enum Resource
-    {
-        None,
-        Wood,   // 목재
-        Iron,   // 철
-        Water   // 물
+        Tool,
+        Ingredient,
+        Rail
     }
 
     // 도구
@@ -35,7 +18,22 @@ public class Define
         None,
         Axe,        // 도끼
         Pickaxe,    // 곡괭이
-        Pail        // 양동이
+    }
+
+    // 재료
+    public enum Ingredient
+    {
+        None,
+        Wood,   // 목재
+        Iron,   // 철
+    }
+
+    // 환경
+    public enum Environment
+    {
+        None,
+        Tree,   // 나무
+        Rock,   // 돌
     }
 
     // 열차 칸
@@ -46,12 +44,12 @@ public class Define
         WaterTank,
     }
 
-    // 플레이어 손에 들 수 있는 것
-    public enum HandHold
+    // 씬
+    public enum Scene
     {
         None,
-        Tool,           // 도구
-        Resource,       // 자원
-        Compartment     // 열차 부품
+        TitleScene,
+        InGameScene,
+        StoreScene
     }
 }

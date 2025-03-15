@@ -96,5 +96,8 @@ public class InputManager
         _interact.Disable();
         _playerInputSystem.Player.Disable();
         _playerInputSystem.UI.Disable();
+
+        OnDashEvent = null;
+        OnInteractEvent = null;
     }
 }

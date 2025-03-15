@@ -7,10 +7,10 @@ public class GameManager
 
 
 
-    public Action<GameObject> OnPlayerSpawn;
+    //public Action<GameObject> OnPlayerSpawn;
    
-    public void SpawnPlayer(GameObject _playerPrefabs)
-    {
-        OnPlayerSpawn?.Invoke(_playerPrefabs);
-    }
+    //public void SpawnPlayer(GameObject _playerPrefabs)
+    //{
+    //    OnPlayerSpawn?.Invoke(_playerPrefabs);
+    //}
 }   

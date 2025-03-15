@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class PlayerSpawner : MonoBehaviour
 {
-    private void Start()
-    {
-       Managers.Game.OnPlayerSpawn += SpawnPlayer;
-    }
+    //private void Start()
+    //{
+    //   Managers.Game.OnPlayerSpawn += SpawnPlayer;
+    //}
 
     private void SpawnPlayer(GameObject _playerPrefabs)
     {
