@@ -26,8 +26,13 @@ public class TrainController : MonoBehaviour
                 CheckFront();
                 break;
             case Define.TrainState.Move:
-                if(!_trainCheckRail.IsFindFront)
-                    Stop();
+                CheckSide();
+                CheckFront();
+                if (!_trainCheckRail.IsFindFront && !_trainCheckRail.IsFindRight && !_trainCheckRail.IsFindLeft)
+                {
+                    Destroy(gameObject);
+                    //Stop();
+                }
                 else
                     Move();
                 break;
@@ -83,6 +88,8 @@ public class TrainController : MonoBehaviour
             _railState = Define.TrainState.RightRotate;
         else if (_trainCheckRail.IsFindLeft)
             _railState = Define.TrainState.LeftRotate;
+        else
+            Move();
     }
 
     void CheckFront()

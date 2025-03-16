@@ -33,7 +33,7 @@ public class TrainCheckRail : MonoBehaviour
         ShowGridIndicator();
         GridCenterPos = _checkPosition + _offset;
 
-        CheckBehind();
+        CheckCurrent();
     }
 
     void Init()
@@ -99,13 +99,11 @@ public class TrainCheckRail : MonoBehaviour
             Debug.Log(hit.collider.gameObject.name);
     }
 
-    public void CheckBehind()
+    public void CheckCurrent()
     {
         RaycastHit hit;
-
-        // 뒤쪽 검사
-        Debug.DrawRay(GridCenterPos - transform.forward * 2 + transform.up * 0.5f, Vector3.down * 2f, Color.red);
-        if(Physics.Raycast(GridCenterPos - transform.forward * 2 + transform.up * 0.5f, Vector3.down, out hit, 2f, _railLayerMask))
+        Debug.DrawRay(GridCenterPos - transform.forward * 1 + transform.up * 0.5f, Vector3.down * 2f, Color.red);
+        if(Physics.Raycast(GridCenterPos - transform.forward * 1 + transform.up * 0.5f, Vector3.down, out hit, 2f, _railLayerMask))
         {
             hit.collider.gameObject.layer = 0;
         }

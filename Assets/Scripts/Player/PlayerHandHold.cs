@@ -116,15 +116,15 @@ public class PlayerHandHold : MonoBehaviour
     public void Put()
     {
         SetTransformHandHold(_currentHandHoldTransform, null, _playerGrid.GridCenterPos);
-        
+
         _currentTool = null;
         _isHoldOneHand = false;
 
         _currentStackObject = null;
         _stackTransform = null;
         _isHoldTwoHand = false;
-        
-        _currentHandHoldTransform = null;
+
+        _currentHandHoldTransform = null;   
     }
     #endregion
 
@@ -136,32 +136,9 @@ public class PlayerHandHold : MonoBehaviour
         {
             IStack nearStack = _nearHandHoldTransform.GetComponent<IStack>();
             Define.Stack stackType = nearStack.StackType;
-            if(stackType == _currentStackObject.StackType)
+            if(stackType == _currentStackObject.StackType && stackType != Define.Stack.Rail)
             {
                 if(nearStack.Top() != null)
-                {
-                    nearStack.Pop();
-                    _currentStackObject.Push();
-                    Debug.Log("자동 줍기");
-                }
-                else
-                {
-                    Destroy(_nearHandHoldTransform.gameObject);
-                }
-            }
-        }
-    }
-
-    void AutoMakeRail()
-    {
-        IHandHold handHold = _nearHandHoldTransform.GetComponent<IHandHold>();
-        if (handHold.HandHoldType == Define.HandHold.TwoHand)
-        {
-            IStack nearStack = _nearHandHoldTransform.GetComponent<IStack>();
-            Define.Stack stackType = nearStack.StackType;
-            if (stackType == _currentStackObject.StackType)
-            {
-                if (nearStack.Top() != null)
                 {
                     nearStack.Pop();
                     _currentStackObject.Push();
