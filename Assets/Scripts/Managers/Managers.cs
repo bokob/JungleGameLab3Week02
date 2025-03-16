@@ -35,7 +35,7 @@ public class Managers : MonoBehaviour
         }
     }
 
-    void OnDestroy()
+    void OnDisable()
     {
         Input.Clear();
     }

@@ -13,6 +13,7 @@ public class Ingredient : MonoBehaviour, IHandHold, IStack
 
     protected Transform topPointer;
     protected GameObject prefab;
+    protected float offset;
 
     protected virtual void Init() { }
 
@@ -21,7 +22,7 @@ public class Ingredient : MonoBehaviour, IHandHold, IStack
         GameObject ingredient = Instantiate(prefab, topPointer.position, topPointer.rotation, transform);
         _stack.Add(ingredient.transform);
         Debug.Log("스택크기: " + _stack.Count);
-        topPointer.position += Vector3.up * 0.3f;
+        topPointer.position += Vector3.up * offset;
     }
 
     public GameObject Pop()
@@ -31,7 +32,7 @@ public class Ingredient : MonoBehaviour, IHandHold, IStack
         GameObject ingredient = _stack[_stack.Count - 1].gameObject;
         _stack.RemoveAt(_stack.Count - 1);
         Destroy(ingredient);
-        topPointer.position -= Vector3.up * 0.3f;
+        topPointer.position -= Vector3.up * offset;
         return ingredient;
     }
 

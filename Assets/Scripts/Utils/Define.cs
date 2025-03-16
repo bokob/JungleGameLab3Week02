@@ -49,6 +49,5 @@ public class Define
         None,
         TitleScene,
         InGameScene,
-        StoreScene
     }
 }

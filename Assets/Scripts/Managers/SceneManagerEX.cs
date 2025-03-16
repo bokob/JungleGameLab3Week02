@@ -42,11 +42,20 @@ public class SceneManagerEX : MonoBehaviour
         switch (CurrentSceneType)
         {
             case Define.Scene.TitleScene:
+                Debug.Log("타이틀 씬");
                 break;
             case Define.Scene.InGameScene:
                 break;
-            case Define.Scene.StoreScene:
-                break;
         }
+    }
+
+    public void StartTitleScene()
+    {
+
+    }
+
+    public void SwitchScene(Define.Scene scene)
+    {
+        SceneManager.LoadScene(scene.ToString());
     }
 }

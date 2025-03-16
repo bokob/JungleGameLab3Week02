@@ -10,8 +10,7 @@ public class TrainController : MonoBehaviour
     [SerializeField] Define.TrainState _railState = Define.TrainState.Stop;
 
     [Header("이동")]
-    float _moveSpeed = 3f;
-    float _rotateSpeed = 3f;
+    [SerializeField] float _moveSpeed = 0.5f;
 
     void Start()
     {

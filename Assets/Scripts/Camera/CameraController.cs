@@ -10,14 +10,16 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
-        //_target = FindObjectOfType<TrainController>().transform;
+        _target = FindAnyObjectByType<TrainController>().transform;
     }
 
     void LateUpdate()
     {
         if (_target != null)
         {
-            transform.LookAt(_target);
+            Vector3 newPosition = transform.position;
+            newPosition.x = _target.position.x;
+            transform.position = newPosition;
         }
     }
 }

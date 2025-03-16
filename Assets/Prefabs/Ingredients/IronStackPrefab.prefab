@@ -68,6 +68,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _prefab: {fileID: 8180327502431056899, guid: 21fef9a68374fa549a453e418d789dd2, type: 3}
+  _offset: 0.3
 --- !u!1 &9177434901745500403
 GameObject:
   m_ObjectHideFlags: 0

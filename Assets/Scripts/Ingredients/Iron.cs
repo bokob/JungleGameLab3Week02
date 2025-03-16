@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class Iron : Ingredient
 {
     [SerializeField] GameObject _prefab;
-
+    [SerializeField] float _offset;
     void Awake()
     {
         Init();
@@ -29,6 +29,7 @@ public class Iron : Ingredient
         StackType = Define.Stack.Iron;
         topPointer = transform.Find("TopPointer");
         prefab = _prefab;
+        offset = _offset;
         Push();
     }
 }

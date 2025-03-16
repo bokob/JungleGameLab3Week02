@@ -1,14 +1,35 @@
 using UnityEngine;
 
-public class Rail : MonoBehaviour
+public class Rail : Ingredient
 {
-    bool _isUsed;
-    public bool IsUsed { get { return _isUsed; } }
+    [SerializeField] GameObject _prefab;
+    [SerializeField] float _offset;
 
-    bool _isEnd = false;
-
-    public void SetUsed()
+    void Awake()
     {
-        _isUsed = true;
+        Init();
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            Push();
+        }
+        else if (Input.GetKeyDown(KeyCode.Y))
+        {
+            Pop();
+            Debug.Log("Pop");
+        }
+    }
+
+    protected override void Init()
+    {
+        HandHoldType = Define.HandHold.TwoHand;
+        StackType = Define.Stack.Rail;
+        topPointer = transform.Find("TopPointer");
+        prefab = _prefab;
+        offset = _offset;
+        Push();
     }
 }

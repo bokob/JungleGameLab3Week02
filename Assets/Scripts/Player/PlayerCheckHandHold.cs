@@ -7,6 +7,7 @@ public class PlayerCheckHandHold : MonoBehaviour
     LayerMask _handHoldLayerMask;
     LayerMask _oneHandLayerMask = 1 << 6;
     LayerMask _twoHandLayerMask = 1 << 8;
+    LayerMask _railLayerMask = 1 << 9;
 
     PlayerGrid _playerGrid;
     [SerializeField] Transform _nearHandHoldTransform;
@@ -23,7 +24,7 @@ public class PlayerCheckHandHold : MonoBehaviour
 
     void Init()
     {
-        _handHoldLayerMask = _oneHandLayerMask | _twoHandLayerMask;
+        _handHoldLayerMask = _oneHandLayerMask | _twoHandLayerMask | _railLayerMask;
         _playerGrid = GetComponent<PlayerGrid>();
     }
 
