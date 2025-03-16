@@ -2,15 +2,13 @@ using UnityEngine;
 
 public class Rail : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    bool _isUsed;
+    public bool IsUsed { get { return _isUsed; } }
 
-    // Update is called once per frame
-    void Update()
+    bool _isEnd = false;
+
+    public void SetUsed()
     {
-        
+        _isUsed = true;
     }
 }

@@ -35,6 +35,14 @@ public class Define
         Rock,   // 돌
     }
 
+    public enum TrainState
+    {
+        Stop,
+        Move,
+        LeftRotate,
+        RightRotate
+    }
+
     // 씬
     public enum Scene
     {

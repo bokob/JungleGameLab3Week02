@@ -3,81 +3,93 @@ using UnityEngine;
 
 public class TrainController : MonoBehaviour
 {
-    static TrainController _instance;
-    public static TrainController Instance => _instance;
+    [Header("감지")]
+    TrainCheckRail _trainCheckRail;
 
-    [SerializeField] float _moveSpeed = 5f;
-    float SteerSpeed = 180;
-    float BodySpeed = 5;
-    public int Gap = 10;
+    [Header("상태")]
+    [SerializeField] Define.TrainState _railState = Define.TrainState.Stop;
 
-    public GameObject BodyPrefab;
-
-    List<GameObject> BodyParts = new List<GameObject>();
-    List<Vector3> PositionsHistory = new List<Vector3>();
+    [Header("이동")]
+    float _moveSpeed = 3f;
+    float _rotateSpeed = 3f;
 
     void Start()
     {
         Init();
     }
 
-    public void Init()
-    {
-        AddBox();
-        AddBox();
-        AddBox();
-        AddBox();
-    }
-
     void Update()
     {
-        if (Input.GetKey(KeyCode.Space))
-            return;
-        //TestMove();
-
-        Move();
-    }
-
-    public void TestMove()
-    {
-        //transform.position += transform.forward * _moveSpeed * Time.deltaTime;
-
-        //float steerDirection = Input.GetAxis("Horizontal");
-        //transform.Rotate(Vector3.up * steerDirection * SteerSpeed * Time.deltaTime);
-
-        // 움직임 기록
-        PositionsHistory.Insert(0, transform.position);
-
-        int index = 0;
-        foreach(GameObject go in BodyParts)
+        switch(_railState)
         {
-            Vector3 point = PositionsHistory[Mathf.Min(index * Gap, PositionsHistory.Count - 1)];
-            Vector3 moveDirection = point - go.transform.position;
-            go.transform.position += moveDirection * BodySpeed * Time.deltaTime;
-            go.transform.LookAt(point);
-            index++;
+            case Define.TrainState.Stop:
+                CheckSide();
+                CheckFront();
+                break;
+            case Define.TrainState.Move:
+                if(!_trainCheckRail.IsFindFront)
+                    Stop();
+                else
+                    Move();
+                break;
+            case Define.TrainState.LeftRotate:
+                Rotation(_railState);
+                break;
+            case Define.TrainState.RightRotate:
+                Rotation(_railState);
+                break;
         }
     }
 
+    void Init()
+    {
+        _trainCheckRail = GetComponent<TrainCheckRail>();
+        _railState = Define.TrainState.Move;
+    }
 
-
+    // 앞 검사하면서 이동
     void Move()
     {
+        _trainCheckRail.CheckFront();
         transform.position += transform.forward * _moveSpeed * Time.deltaTime;
     }
 
-
-
-    void AddBox()
+    // 멈춤 상태로 변경
+    void Stop()
     {
-        GameObject body = Instantiate(BodyPrefab);
-        BodyParts.Add(body);
+        _railState = Define.TrainState.Stop;
     }
 
-    void CheckRail()
+    // 회전
+    void Rotation(Define.TrainState state)
     {
-
+        if (state == Define.TrainState.RightRotate)
+        {
+            transform.rotation = transform.rotation * Quaternion.Euler(0, 90, 0);
+            Debug.Log("오른쪽 회전");
+        }
+        else if(state == Define.TrainState.LeftRotate)
+        {
+            transform.rotation = transform.rotation * Quaternion.Euler(0, -90, 0);
+            Debug.Log("왼쪽 회전");
+        }
+        Stop();
     }
 
+    // 좌우 검사
+    void CheckSide()
+    {
+        _trainCheckRail.CheckSide();
+        if (_trainCheckRail.IsFindRight)
+            _railState = Define.TrainState.RightRotate;
+        else if (_trainCheckRail.IsFindLeft)
+            _railState = Define.TrainState.LeftRotate;
+    }
 
+    void CheckFront()
+    {
+        _trainCheckRail.CheckFront();
+        if(_trainCheckRail.IsFindFront)
+            _railState = Define.TrainState.Move;
+    }
 }
