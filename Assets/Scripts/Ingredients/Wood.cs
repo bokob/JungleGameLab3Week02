@@ -12,21 +12,21 @@ public class Wood : Ingredient
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            Push();
-        }
-        else if (Input.GetKeyDown(KeyCode.Y))
-        {
-            Pop();
-            Debug.Log("Pop");
-        }
+        //if (Input.GetKeyDown(KeyCode.T))
+        //{
+        //    Push();
+        //}
+        //else if (Input.GetKeyDown(KeyCode.Y))
+        //{
+        //    Pop();
+        //    Debug.Log("Pop");
+        //}
     }
 
     protected override void Init()
     {
         HandHoldType = Define.HandHold.TwoHand;
-        IngredientType = Define.Ingredient.Wood;
+        StackType = Define.Stack.Wood;
         topPointer = transform.Find("TopPointer");
         prefab = _prefab;
         Push();

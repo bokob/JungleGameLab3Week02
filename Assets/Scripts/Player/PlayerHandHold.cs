@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 // 플레이어 손에 넣을 것들 관리
@@ -22,20 +23,19 @@ public class PlayerHandHold : MonoBehaviour
     public IHandHold CurrentHandHold { get { return _currentHandHold; } }
 
     [Header("손에 들고 있는 것")]
-    Ingredient _currentIngredient;  // 현재 손에 들고 있는 재료
-    public Ingredient CurrentIngredient { get { return _currentIngredient; } }
-
     bool _isHoldOneHand = false;
     bool _isHoldTwoHand = false;
     public bool IsHoldOneHand { get { return _isHoldOneHand; } }
     public bool IsHoldTwoHand { get { return _isHoldTwoHand; } }
 
-
     [Header("도구")]
     Tool _currentTool;  // 현재 손에 들고 있는 도구
     public Tool CurrentTool { get { return _currentTool; } }
 
-
+    [Header("쌓을 수 있는 것")]
+    IStack _currentStackObject;
+    public IStack CurrentStackObject { get { return _currentStackObject; } }
+    [SerializeField] Transform _stackTransform;
 
     void Awake()
     {
@@ -54,6 +54,16 @@ public class PlayerHandHold : MonoBehaviour
         Managers.Input.OnInteractEvent += InteractHandHold; // 이벤트 등록
     }
 
+    void Update()
+    {
+        _nearHandHoldTransform = _playerCheckHandHold.NearHandHoldTransform;
+        if (_nearHandHoldTransform != null && _currentStackObject != null)
+        {
+            AutoGet();
+        }
+    }
+
+    #region Space 키로 물건과 상호작용
     // 들 수 있는 물건과 상호작용
     public void InteractHandHold()
     {
@@ -94,6 +104,9 @@ public class PlayerHandHold : MonoBehaviour
         {
             parent = _handResourceTransform;
             _isHoldTwoHand = true;
+
+            _stackTransform = _nearHandHoldTransform;
+            _currentStackObject = _nearHandHoldTransform.GetComponent<IStack>();
         }
         _currentHandHoldTransform = _nearHandHoldTransform;
         _nearHandHoldTransform = null;
@@ -103,10 +116,40 @@ public class PlayerHandHold : MonoBehaviour
     public void Put()
     {
         SetTransformHandHold(_currentHandHoldTransform, null, _playerGrid.GridCenterPos);
+        
         _currentTool = null;
         _isHoldOneHand = false;
+
+        _currentStackObject = null;
+        _stackTransform = null;
         _isHoldTwoHand = false;
+        
         _currentHandHoldTransform = null;
+    }
+    #endregion
+
+    // 같은 종류의 물건을 자동으로 들기 (3개까지만)
+    void AutoGet()
+    {
+        IHandHold handHold = _nearHandHoldTransform.GetComponent<IHandHold>();
+        if(handHold.HandHoldType == Define.HandHold.TwoHand)
+        {
+            IStack nearStack = _nearHandHoldTransform.GetComponent<IStack>();
+            Define.Stack stackType = nearStack.StackType;
+            if(stackType == _currentStackObject.StackType)
+            {
+                if(nearStack.Top() != null)
+                {
+                    nearStack.Pop();
+                    _currentStackObject.Push();
+                    Debug.Log("자동 줍기");
+                }
+                else
+                {
+                    Destroy(_nearHandHoldTransform.gameObject);
+                }
+            }
+        }
     }
 
     // 손에 들 수 있는 물건 Transform 조정

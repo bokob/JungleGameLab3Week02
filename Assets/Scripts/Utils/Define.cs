@@ -19,12 +19,12 @@ public class Define
         Pickaxe,    // 곡괭이
     }
 
-    // 재료
-    public enum Ingredient
+    public enum Stack
     {
         None,
-        Wood,   // 목재
-        Iron,   // 철
+        Wood,
+        Iron,
+        Rail
     }
 
     // 환경
