@@ -6,12 +6,13 @@ using UnityEngine;
 public class PlayerHandHold : MonoBehaviour
 {
     [Header("감지")]
+    PlayerGrid _playerGrid;
     PlayerCheckHandHold _playerCheckHandHold;
     PlayerCheckEnvironment _playerCheckEnvironment;
 
-    [Header("물건 관리")]
-    PlayerTool _playerTool;
-    PlayerStack _playerStack;
+    [Header("손")]
+    Transform _handToolTransform;                   // 도구 손 위치
+    Transform _handResourceTransform;               // 스택 손 위치
 
     [Header("상호작용")]
     [SerializeField] Transform _nearHandHoldTransform;
@@ -24,6 +25,18 @@ public class PlayerHandHold : MonoBehaviour
     Ingredient _currentIngredient;  // 현재 손에 들고 있는 재료
     public Ingredient CurrentIngredient { get { return _currentIngredient; } }
 
+    bool _isHoldOneHand = false;
+    bool _isHoldTwoHand = false;
+    public bool IsHoldOneHand { get { return _isHoldOneHand; } }
+    public bool IsHoldTwoHand { get { return _isHoldTwoHand; } }
+
+
+    [Header("도구")]
+    Tool _currentTool;  // 현재 손에 들고 있는 도구
+    public Tool CurrentTool { get { return _currentTool; } }
+
+
+
     void Awake()
     {
         init();
@@ -31,11 +44,12 @@ public class PlayerHandHold : MonoBehaviour
 
     void init()
     {
+        _playerGrid = GetComponent<PlayerGrid>();
         _playerCheckHandHold = GetComponent<PlayerCheckHandHold>();
         _playerCheckEnvironment = GetComponent<PlayerCheckEnvironment>();
-        _playerStack = GetComponent<PlayerStack>();
 
-        _playerTool = GetComponent<PlayerTool>();
+        _handToolTransform = transform.Find("HandTool");
+        _handResourceTransform = transform.Find("HandResource");
 
         Managers.Input.OnInteractEvent += InteractHandHold; // 이벤트 등록
     }
@@ -46,67 +60,52 @@ public class PlayerHandHold : MonoBehaviour
         _nearHandHoldTransform = _playerCheckHandHold.NearHandHoldTransform;
         if (_nearHandHoldTransform != null) // 주변에 들 수 있는 것이 있는 경우
         {
-            if (_playerStack.IsEmpty && !_playerTool.IsHoldTool)    // 빈 손인 경우
+            // 근처 손에 들 수 있는 것의 인터페이스 가져오기
+            _nearHandHold = _nearHandHoldTransform.GetComponent<IHandHold>();
+            if(_currentHandHoldTransform == null)   // 빈손
             {
-                GetHandHold();     // 새로운 물건 들기
+                Get();
             }
-            else if (_playerTool.IsHoldTool) // 도구 든 경우
+            else // 빈손 X
             {
-                PutHandHold();     // 도구 내려놓기
-                GetHandHold();     // 새로운 물건 들기
-
-                Debug.Log("여긴가?");
-            }
-            else if (!_playerStack.IsEmpty) // 스택에 무언가 있는 경우 
-            {
-                PutHandHold();     // 땅에 전부 내려두기
-                GetHandHold();     // 새로운 물건 들기
+                Put();
+                Get();
             }
         }
         else if (_currentHandHoldTransform != null && !_playerCheckEnvironment.IsNearEnvironment && !_playerCheckHandHold.IsNearHandHold)
         {// 주변 들 것 X, 손에 무언가 O, 주변 환경 X 
-            PutHandHold(); // 땅에 두기
+            Put();
+            Debug.Log("땅에 두기요~");
         }
     }
 
-    // 손에 들 수 있는 것 줍기
-    public void GetHandHold()
+    public void Get()
     {
-        // 근처 손에 들 수 있는 것의 인터페이스 가져오기
-        _nearHandHold = _nearHandHoldTransform.GetComponent<IHandHold>();
-        if (_nearHandHold.HandHoldType == Define.HandHold.Tool)           // 도구인 경우
+        Transform parent = null;
+        IHandHold handHold = _nearHandHoldTransform.GetComponent<IHandHold>();
+        if (handHold.HandHoldType == Define.HandHold.OneHand) // 도구
         {
-            _playerTool.Get(_nearHandHoldTransform); // 도구 들기
-        }
-        else if (_nearHandHold.HandHoldType == Define.HandHold.Ingredient) // 재료인 경우
-        {
-            _playerStack.Push(_nearHandHoldTransform.gameObject);
-        }
-        else if(_nearHandHold.HandHoldType == Define.HandHold.Rail)       // 레일인 경우
-        {
-            _playerStack.Push(_nearHandHoldTransform.gameObject);
-        }
+            parent = _handToolTransform;
+            _isHoldOneHand = true;
 
+            _currentTool = _nearHandHoldTransform.GetComponent<Tool>();
+        }
+        else if (handHold.HandHoldType == Define.HandHold.TwoHand) // 재료 OR 레일
+        {
+            parent = _handResourceTransform;
+            _isHoldTwoHand = true;
+        }
         _currentHandHoldTransform = _nearHandHoldTransform;
         _nearHandHoldTransform = null;
+        SetTransformHandHold(_currentHandHoldTransform, parent, Vector3.zero);
     }
 
-    public void PutHandHold()
+    public void Put()
     {
-        if (_playerTool.IsHoldTool) // 도구 들고 있는 경우
-        {
-            _playerTool.Put(); // 도구 내려놓기
-        }
-        else if (!_playerStack.IsEmpty) // 스택에 무언가 있는 경우
-        {
-            /*
-             TODO
-            스택에 있는 것을 바닥에 내려놓기
-             */
-
-            _playerStack.Put();
-        }
-        // 현재 손에 들고 있는 정보 지우기
+        SetTransformHandHold(_currentHandHoldTransform, null, _playerGrid.GridCenterPos);
+        _currentTool = null;
+        _isHoldOneHand = false;
+        _isHoldTwoHand = false;
         _currentHandHoldTransform = null;
     }
 

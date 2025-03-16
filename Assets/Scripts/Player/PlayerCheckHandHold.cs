@@ -37,6 +37,7 @@ public class PlayerCheckHandHold : MonoBehaviour
     {
         Collider[] colliders = Physics.OverlapSphere(_playerGrid.GridCenterPos, _checkRange, _handHoldLayerMask);
 
+
         if (colliders.Length >= 1)  // 가장 가까운 것 찾기
         {
             _isNearHandHold = true;
@@ -69,6 +70,7 @@ public class PlayerCheckHandHold : MonoBehaviour
             // 플레이어 발 앞
             Gizmos.color = (_isNearHandHold) ? new Color(0, 1, 0) : new Color(1, 0, 0);
             Gizmos.DrawSphere(_playerGrid.GridCenterPos, _checkRange);
+            //Gizmos.DrawCube(_playerGrid.GridCenterPos, new Vector3(0.5f, 0.5f, 0.5f));
         }
     }
 }

@@ -9,7 +9,7 @@ public class Pickaxe : Tool
 
     protected override void Init()
     {
-        HandHoldType = Define.HandHold.Tool;
+        HandHoldType = Define.HandHold.OneHand;
         ToolType = Define.Tool.Pickaxe;
     }
 

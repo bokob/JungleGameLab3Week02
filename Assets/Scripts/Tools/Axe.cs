@@ -9,7 +9,7 @@ public class Axe : Tool
 
     protected override void Init()
     {
-        HandHoldType = Define.HandHold.Tool;
+        HandHoldType = Define.HandHold.OneHand;
         ToolType = Define.Tool.Axe;
     }
 

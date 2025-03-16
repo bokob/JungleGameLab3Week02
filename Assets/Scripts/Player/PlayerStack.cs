@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.Port;
 
 public class PlayerStack : MonoBehaviour
 {
@@ -8,7 +7,7 @@ public class PlayerStack : MonoBehaviour
     PlayerGrid _playerGrid;
 
     [Header("손")]
-    Transform _handResourceTransform;                   // 도구 손 위치
+    Transform _handResourceTransform;                   // 스택 손 위치
 
     [Header("현재 스택요소")]
     Tool _currentTool; // 현재 손에 들고 있는 도구
@@ -24,8 +23,6 @@ public class PlayerStack : MonoBehaviour
     public bool IsFull { get { return _stack.Count == capacity; } }
     #endregion
 
-    [SerializeField] GameObject testPrefab;
-
     void Start()
     {
         Init();
@@ -33,16 +30,16 @@ public class PlayerStack : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            GameObject GO = Instantiate(testPrefab);
-            Push(GO);
-        }
-        else if(Input.GetKeyDown(KeyCode.Y))
-        {
-            GameObject GO = Pop();
-            Destroy(GO);
-        }
+        //if (Input.GetKeyDown(KeyCode.T))
+        //{
+        //    GameObject GO = Instantiate(testPrefab);
+        //    Push(GO);
+        //}
+        //else if(Input.GetKeyDown(KeyCode.Y))
+        //{
+        //    GameObject GO = Pop();
+        //    Destroy(GO);
+        //}
     }
 
     void Init()
@@ -63,6 +60,7 @@ public class PlayerStack : MonoBehaviour
 
             GO.transform.SetParent(_handResourceTransform);
             GO.transform.position = _topPointer.position;
+
             _topPointer.position += Vector3.up * _offset;
         }
     }
@@ -81,19 +79,9 @@ public class PlayerStack : MonoBehaviour
         GameObject GO = _stack[_stack.Count - 1].gameObject;
         _stack.RemoveAt(_stack.Count - 1);
 
-
-
         _topPointer.position -= Vector3.up * _offset;
-
 
         return GO;
     }
     #endregion
-
-
-    public void Put()
-    {
-
-    }
-
 }

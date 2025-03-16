@@ -39,7 +39,6 @@ public class PlayerGrid : MonoBehaviour
         {
             position = hit.point;
         }
-        //Debug.Log("position: " + position);
         return position;
     }
 
@@ -50,9 +49,6 @@ public class PlayerGrid : MonoBehaviour
         Vector3 playerFrontPosition = GetSelectedMapPosition();             // 검사하고 싶은 바닥 좌표 구하기
         Vector3Int gridPosition = _grid.WorldToCell(playerFrontPosition);   // 바닥 좌표에 매칭되는 그리드 좌표
         _checkPosition = _grid.CellToWorld(gridPosition);                   // 그리드 좌표 -> 월드 좌표 (좌하단 모서리 좌표 반환)
-
-        //Debug.Log("Cell to world: " + _checkPosition);
-
-        _cellIndicator.transform.position = _checkPosition; // 인디케이터는 이미 x, z가 0.5씩 더해져 있음
+        _cellIndicator.transform.position = _checkPosition;                 // 인디케이터는 이미 x, z가 0.5씩 더해져 있음
     }
 }

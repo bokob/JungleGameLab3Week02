@@ -9,7 +9,7 @@ public class PlayerGather : MonoBehaviour
     Animator _anim;
     int _gatherHash;
 
-    PlayerTool _playerTool;
+    PlayerHandHold _playerHandHold;
     PlayerCheckEnvironment _playerCheckEnvironment;
 
     [Header("상호작용")]
@@ -26,7 +26,7 @@ public class PlayerGather : MonoBehaviour
     void Init()
     {
         _playerCheckEnvironment = GetComponent<PlayerCheckEnvironment>();
-        _playerTool = GetComponent<PlayerTool>();
+        _playerHandHold = GetComponent<PlayerHandHold>();
 
         _anim = GetComponent<Animator>();
         _gatherHash = Animator.StringToHash("isGather");
@@ -34,7 +34,7 @@ public class PlayerGather : MonoBehaviour
 
     void Update()
     {
-        if (_playerCheckEnvironment.NearEnvironmentTransform != null && _playerTool.IsHoldTool) // 도구, 환경 O
+        if (_playerCheckEnvironment.NearEnvironmentTransform != null && _playerHandHold.IsHoldOneHand) // 도구, 환경 O
         {
             Debug.Log("실행");
             InteractEnvironment();
@@ -45,12 +45,12 @@ public class PlayerGather : MonoBehaviour
 
     void InteractEnvironment()
     {
-        isHaveTool = _playerTool.IsHoldTool;
+        isHaveTool = _playerHandHold.IsHoldOneHand;
         _nearGatherTransform = _playerCheckEnvironment.NearEnvironmentTransform;
         if (isHaveTool)
         {
             _nearEnvironment = _nearGatherTransform.GetComponent<Environment>();
-            _currentTool = _playerTool.CurrentTool;
+            _currentTool = _playerHandHold.CurrentTool;
             if ((_currentTool.ToolType == Define.Tool.Axe && _nearEnvironment.EnvironmentType == Define.Environment.Tree) ||
                 (_currentTool.ToolType == Define.Tool.Pickaxe && _nearEnvironment.EnvironmentType == Define.Environment.Rock))
             {
@@ -71,7 +71,7 @@ public class PlayerGather : MonoBehaviour
             Environment environment = null;
             if (_nearGatherTransform.TryGetComponent<Environment>(out environment))
             {
-                environment.Deplete(_playerTool.CurrentTool.ToolType);
+                environment.Deplete(_playerHandHold.CurrentTool.ToolType);
             }
         }
     }

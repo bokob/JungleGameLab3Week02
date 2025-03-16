@@ -7,9 +7,8 @@ public class Define
     public enum HandHold
     {
         None,
-        Tool,
-        Ingredient,
-        Rail
+        OneHand,
+        TwoHand
     }
 
     // 도구
@@ -34,14 +33,6 @@ public class Define
         None,
         Tree,   // 나무
         Rock,   // 돌
-    }
-
-    // 열차 칸
-    public enum Compartment
-    {
-        None,
-        Engine,
-        WaterTank,
     }
 
     // 씬
