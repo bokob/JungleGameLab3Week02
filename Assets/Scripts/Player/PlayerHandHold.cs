@@ -11,7 +11,7 @@ public class PlayerHandHold : MonoBehaviour
     PlayerCheckHandHold _playerCheckHandHold;
     PlayerCheckEnvironment _playerCheckEnvironment;
 
-    [Header("손")]
+    [Header("물건 놓을 위치")]
     Transform _handToolTransform;                   // 도구 손 위치
     Transform _handResourceTransform;               // 스택 손 위치
 
@@ -128,7 +128,7 @@ public class PlayerHandHold : MonoBehaviour
     }
     #endregion
 
-    // 같은 종류의 물건을 자동으로 들기 (3개까지만)
+    // 같은 종류의 물건을 자동으로 들기
     void AutoGet()
     {
         IHandHold handHold = _nearHandHoldTransform.GetComponent<IHandHold>();
@@ -139,6 +139,29 @@ public class PlayerHandHold : MonoBehaviour
             if(stackType == _currentStackObject.StackType)
             {
                 if(nearStack.Top() != null)
+                {
+                    nearStack.Pop();
+                    _currentStackObject.Push();
+                    Debug.Log("자동 줍기");
+                }
+                else
+                {
+                    Destroy(_nearHandHoldTransform.gameObject);
+                }
+            }
+        }
+    }
+
+    void AutoMakeRail()
+    {
+        IHandHold handHold = _nearHandHoldTransform.GetComponent<IHandHold>();
+        if (handHold.HandHoldType == Define.HandHold.TwoHand)
+        {
+            IStack nearStack = _nearHandHoldTransform.GetComponent<IStack>();
+            Define.Stack stackType = nearStack.StackType;
+            if (stackType == _currentStackObject.StackType)
+            {
+                if (nearStack.Top() != null)
                 {
                     nearStack.Pop();
                     _currentStackObject.Push();
