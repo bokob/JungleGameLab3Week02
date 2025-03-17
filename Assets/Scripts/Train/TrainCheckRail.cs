@@ -76,8 +76,8 @@ public class TrainCheckRail : MonoBehaviour
         Debug.DrawRay(GridCenterPos + transform.up * 0.5f, Vector3.down * 2f, Color.red);
         _isFindFront = Physics.Raycast(GridCenterPos + transform.up * 0.5f, Vector3.down, out hit, 2f, _railLayerMask);
 
-        if (_isFindFront)
-            Debug.Log(hit.collider.gameObject.name);
+        //if (_isFindFront)
+        //    Debug.Log(hit.collider.gameObject.name);
     }
 
     public void CheckSide()
@@ -88,15 +88,15 @@ public class TrainCheckRail : MonoBehaviour
         Debug.DrawRay(GridCenterPos - transform.forward + transform.right + transform.up * 0.5f, Vector3.down * 2f, Color.red);
         _isFindRight = Physics.Raycast(GridCenterPos - transform.forward + transform.right + transform.up * 0.5f, Vector3.down, out hit, 2f, _railLayerMask);
 
-        if (_isFindRight)
-            Debug.Log(hit.collider.gameObject.name);
+        //if (_isFindRight)
+        //    Debug.Log(hit.collider.gameObject.name);
 
         // 왼쪽 검사
         Debug.DrawRay(GridCenterPos - transform.forward - transform.right + transform.up * 0.5f, Vector3.down * 2f, Color.red);
         _isFindLeft = Physics.Raycast(GridCenterPos - transform.forward - transform.right + transform.up * 0.5f, Vector3.down, out hit, 2f, _railLayerMask);
 
-        if (_isFindLeft)
-            Debug.Log(hit.collider.gameObject.name);
+        //if (_isFindLeft)
+        //    Debug.Log(hit.collider.gameObject.name);
     }
 
     public void CheckCurrent()

@@ -83,7 +83,13 @@ public class WorkTable : Tool
         // 검사하고 싶은 바닥 좌표 -> 해당하는 그리드 좌표 -> 월드 좌표
         Vector3 trainFrontPosition = GetSelectedMapPosition();             // 검사하고 싶은 바닥 좌표 구하기
         Vector3Int gridPosition = _grid.WorldToCell(trainFrontPosition);   // 바닥 좌표에 매칭되는 그리드 좌표
+
+        Debug.Log("그리드에서의 바닥 좌표: " + gridPosition);
+
         _checkPosition = _grid.CellToWorld(gridPosition);                   // 그리드 좌표 -> 월드 좌표 (좌하단 모서리 좌표 반환)
+
+        Debug.Log("그리드 -> 월드: " + _checkPosition);
+
     }
     #endregion
 
@@ -93,6 +99,7 @@ public class WorkTable : Tool
         RaycastHit hit;
         Debug.DrawRay(GridCenterPos + transform.up * 0.5f, Vector3.down * 2f, Color.red);   // 앞쪽
         _isCanFront = !Physics.Raycast(GridCenterPos + transform.up * 0.5f, Vector3.down, out hit, 2f, _frontObstacleLayerMask);
+        Debug.Log("책상 그리드: " + GridCenterPos);
         if (_isCanFront)
         {
             Debug.Log("작업대 앞에 아무것도 없음");

@@ -53,7 +53,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2083071722819318707, guid: 74c5dad9f0615994ab68502afcb351d7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.049999952
+      value: -0.05
       objectReference: {fileID: 0}
     - target: {fileID: 2083071722819318707, guid: 74c5dad9f0615994ab68502afcb351d7, type: 3}
       propertyPath: m_LocalPosition.z
@@ -115,7 +115,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2083071722819318707, guid: 74c5dad9f0615994ab68502afcb351d7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.049999952
+      value: -0.05
       objectReference: {fileID: 0}
     - target: {fileID: 2083071722819318707, guid: 74c5dad9f0615994ab68502afcb351d7, type: 3}
       propertyPath: m_LocalPosition.z
@@ -177,7 +177,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2083071722819318707, guid: 74c5dad9f0615994ab68502afcb351d7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.049999952
+      value: -0.05
       objectReference: {fileID: 0}
     - target: {fileID: 2083071722819318707, guid: 74c5dad9f0615994ab68502afcb351d7, type: 3}
       propertyPath: m_LocalPosition.z
@@ -272,6 +272,10 @@ PrefabInstance:
     - target: {fileID: 3520552218533146514, guid: 0dafd8a1267e66044b2af85f49fe1843, type: 3}
       propertyPath: m_Name
       value: Station
+      objectReference: {fileID: 0}
+    - target: {fileID: 3520552218533146514, guid: 0dafd8a1267e66044b2af85f49fe1843, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
