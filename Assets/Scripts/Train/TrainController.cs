@@ -12,7 +12,8 @@ public class TrainController : MonoBehaviour
 
     [Header("이동")]
     [SerializeField] float _moveSpeed = 0;
-    float faster = 0.05f;
+    float _initSpeed = 0.025f;
+    Coroutine _speedIncreaseCoroutine;
 
     void Start()
     {
@@ -21,7 +22,12 @@ public class TrainController : MonoBehaviour
 
     void Update()
     {
-        switch(_railState)
+        if (_speedIncreaseCoroutine == null)
+        {
+            _speedIncreaseCoroutine = StartCoroutine(SpeedIncreaseCoroutine());
+        }
+
+        switch (_railState)
         {
             case Define.TrainState.Stop:
                 CheckSide();
@@ -52,8 +58,7 @@ public class TrainController : MonoBehaviour
         _trainCheckRail = GetComponent<TrainCheckRail>();
         _railState = Define.TrainState.Move;
 
-        _moveSpeed = 0;
-        StartCoroutine(SpeedIncreaseCoroutine());
+        _moveSpeed = _initSpeed;
     }
 
     // 앞 검사하면서 이동
@@ -106,12 +111,13 @@ public class TrainController : MonoBehaviour
 
     IEnumerator SpeedIncreaseCoroutine()
     {
-        SetMoreFaster();
         yield return new WaitForSeconds(30f);
+        SetMoreFaster();
+        _speedIncreaseCoroutine = null;
     }
 
     public void SetMoreFaster()
     {
-        _moveSpeed += faster;
+        _moveSpeed += _moveSpeed / 2;
     }
 }

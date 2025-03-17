@@ -143,7 +143,7 @@ public class PlayerHandHold : MonoBehaviour
             Define.Stack stackType = nearStack.StackType;
             if (stackType == _currentStackObject.StackType && stackType != Define.Stack.Rail)
             {
-                if (nearStack.Top() != null)
+                if (nearStack.Top() != null && _currentStackObject != null)
                 {
                     nearStack.Pop();
                     _currentStackObject.Push();

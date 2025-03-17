@@ -26,7 +26,6 @@ public class Managers : MonoBehaviour
                 go = new GameObject { name = "Managers" };
                 go.AddComponent<Managers>();
             }
-            DontDestroyOnLoad(go);
             _instance = go.GetComponent<Managers>();
             //Game.SpawnPlayer((GameObject)Resources.Load(""));
             Input.Init();
