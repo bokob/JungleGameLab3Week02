@@ -10,7 +10,8 @@ public class TrainController : MonoBehaviour
     [SerializeField] Define.TrainState _railState = Define.TrainState.Stop;
 
     [Header("이동")]
-    [SerializeField] float _moveSpeed = 0.5f;
+    [SerializeField] float _moveSpeed = 0.05f;
+    float faster = 2f;
 
     void Start()
     {
@@ -97,5 +98,10 @@ public class TrainController : MonoBehaviour
         _trainCheckRail.CheckFront();
         if(_trainCheckRail.IsFindFront)
             _railState = Define.TrainState.Move;
+    }
+
+    public void SetMoreFaster()
+    {
+        _moveSpeed *= faster;
     }
 }

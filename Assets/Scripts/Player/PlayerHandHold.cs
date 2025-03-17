@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 // 플레이어 손에 넣을 것들 관리
@@ -98,6 +96,7 @@ public class PlayerHandHold : MonoBehaviour
             parent = _handToolTransform;
             _isHoldOneHand = true;
 
+            _nearHandHoldTransform.GetChild(0).gameObject.SetActive(false);
             _currentTool = _nearHandHoldTransform.GetComponent<Tool>();
         }
         else if (handHold.HandHoldType == Define.HandHold.TwoHand) // 재료 OR 레일
@@ -116,6 +115,11 @@ public class PlayerHandHold : MonoBehaviour
     public void Put()
     {
         SetTransformHandHold(_currentHandHoldTransform, null, _playerGrid.GridCenterPos);
+
+        if (_currentTool != null)
+        {
+            _currentHandHoldTransform.GetChild(0).gameObject.SetActive(true);
+        }
 
         _currentTool = null;
         _isHoldOneHand = false;

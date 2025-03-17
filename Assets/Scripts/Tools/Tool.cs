@@ -8,6 +8,12 @@ public abstract class Tool : MonoBehaviour, IHandHold
 
     public Define.Tool ToolType { get; protected set; }
 
+    protected GameObject toolSign;
 
     protected virtual void Init(){}
+
+    public void SetToggleSign(bool isActive)
+    {
+        toolSign.SetActive(isActive);
+    }
 }

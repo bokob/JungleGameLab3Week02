@@ -11,5 +11,6 @@ public class Axe : Tool
     {
         HandHoldType = Define.HandHold.OneHand;
         ToolType = Define.Tool.Axe;
+        toolSign = GetComponentInChildren<Canvas>().gameObject;
     }
 }
