@@ -49,11 +49,6 @@ public class SceneManagerEX : MonoBehaviour
         }
     }
 
-    public void StartTitleScene()
-    {
-
-    }
-
     public void SwitchScene(Define.Scene scene)
     {
         SceneManager.LoadScene(scene.ToString());

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,8 +11,8 @@ public class TrainController : MonoBehaviour
     [SerializeField] Define.TrainState _railState = Define.TrainState.Stop;
 
     [Header("이동")]
-    [SerializeField] float _moveSpeed = 0.05f;
-    float faster = 2f;
+    [SerializeField] float _moveSpeed = 0;
+    float faster = 0.05f;
 
     void Start()
     {
@@ -50,6 +51,9 @@ public class TrainController : MonoBehaviour
     {
         _trainCheckRail = GetComponent<TrainCheckRail>();
         _railState = Define.TrainState.Move;
+
+        _moveSpeed = 0;
+        StartCoroutine(SpeedIncreaseCoroutine());
     }
 
     // 앞 검사하면서 이동
@@ -100,8 +104,14 @@ public class TrainController : MonoBehaviour
             _railState = Define.TrainState.Move;
     }
 
+    IEnumerator SpeedIncreaseCoroutine()
+    {
+        SetMoreFaster();
+        yield return new WaitForSeconds(30f);
+    }
+
     public void SetMoreFaster()
     {
-        _moveSpeed *= faster;
+        _moveSpeed += faster;
     }
 }

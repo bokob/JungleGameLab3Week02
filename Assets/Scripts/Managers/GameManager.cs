@@ -8,6 +8,9 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] TrainController _trainController;
 
+    bool _isGameOver = false;
+    bool _isGameClear = false;
+
     void Awake()
     {
         if(_instance == null)
@@ -23,14 +26,20 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        if (_isGameOver || _isGameClear)
+            return;
+
         if(_trainController == null)
         {
-
+            Debug.Log("게임 오버");
+            _isGameOver = true;
+            Invoke("GameOver", 3f);
+            GameOver();
         }
     }
 
-    public void Restart()
+    public void GameOver()
     {
-        // 게임 재시작
+        SceneManagerEX.Instance.SwitchScene(Define.Scene.TitleScene);
     }
 }   
