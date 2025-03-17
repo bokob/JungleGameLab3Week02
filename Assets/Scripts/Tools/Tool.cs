@@ -10,6 +10,4 @@ public abstract class Tool : MonoBehaviour, IHandHold
 
 
     protected virtual void Init(){}
-
-    public abstract void Use();
 }

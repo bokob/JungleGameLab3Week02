@@ -12,9 +12,4 @@ public class Axe : Tool
         HandHoldType = Define.HandHold.OneHand;
         ToolType = Define.Tool.Axe;
     }
-
-    public override void Use()
-    {
-        Debug.Log($"Use {ToolType.ToString()}");
-    }
 }

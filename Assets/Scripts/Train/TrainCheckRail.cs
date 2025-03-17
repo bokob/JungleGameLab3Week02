@@ -30,7 +30,7 @@ public class TrainCheckRail : MonoBehaviour
     void Update()
     {
         _checkPosition = transform.position + transform.forward * 0.6f;
-        ShowGridIndicator();
+        UpdateCheckPosition();
         GridCenterPos = _checkPosition + _offset;
 
         CheckCurrent();
@@ -58,7 +58,7 @@ public class TrainCheckRail : MonoBehaviour
     }
 
     // 그리드 위치(중심)에 인디케이터 표시
-    public void ShowGridIndicator()
+    public void UpdateCheckPosition()
     {
         // 검사하고 싶은 바닥 좌표 -> 해당하는 그리드 좌표 -> 월드 좌표
         Vector3 trainFrontPosition = GetSelectedMapPosition();             // 검사하고 싶은 바닥 좌표 구하기

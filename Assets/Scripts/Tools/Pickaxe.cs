@@ -12,9 +12,4 @@ public class Pickaxe : Tool
         HandHoldType = Define.HandHold.OneHand;
         ToolType = Define.Tool.Pickaxe;
     }
-
-    public override void Use()
-    {
-        Debug.Log($"Use {ToolType.ToString()}");
-    }
 }

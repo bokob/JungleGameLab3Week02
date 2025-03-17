@@ -17,6 +17,7 @@ public class Define
         None,
         Axe,        // 도끼
         Pickaxe,    // 곡괭이
+        WorkTable,  // 작업대
     }
 
     public enum Stack

@@ -132,13 +132,14 @@ public class PlayerHandHold : MonoBehaviour
     void AutoGet()
     {
         IHandHold handHold = _nearHandHoldTransform.GetComponent<IHandHold>();
-        if(handHold.HandHoldType == Define.HandHold.TwoHand)
+        
+        if (handHold != null && handHold.HandHoldType == Define.HandHold.TwoHand)
         {
             IStack nearStack = _nearHandHoldTransform.GetComponent<IStack>();
             Define.Stack stackType = nearStack.StackType;
-            if(stackType == _currentStackObject.StackType && stackType != Define.Stack.Rail)
+            if (stackType == _currentStackObject.StackType && stackType != Define.Stack.Rail)
             {
-                if(nearStack.Top() != null)
+                if (nearStack.Top() != null)
                 {
                     nearStack.Pop();
                     _currentStackObject.Push();
